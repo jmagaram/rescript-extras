@@ -2,8 +2,8 @@
 
 Utilities for [ReScript](https://rescript-lang.org). Includes:
 
-- [Lazy Sequences](SEQ_README.md) with the `Seq` module. Follow the link for an overview, functions, and samples.
-- A lazy-promise `Task` and `TaskResult`
+- [Lazy sequences](https://github.com/jmagaram/rescript-seq) are now in a separate repository.
+- `Task` and `TaskResult`
 - Untagged `Union` and `Literal` to construct and pattern match on discriminated unions of any kind
 - Useful extensions to `Option`, `Result`, and `Array`
 - `NonEmptyArray`
@@ -26,10 +26,6 @@ Add to your `bsconfig.json`...
 + "bsc-flags": ["-open @jmagaram/rescript-extras"],
 }
 ```
-
-## Lazy sequences (Seq module)
-
-See [Seq README](SEQ_README.md). This really should be its own package.
 
 ## Task and TaskResult
 

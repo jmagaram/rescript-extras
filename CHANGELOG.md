@@ -1,3 +1,8 @@
+## Version 2.1.0
+
+Move lazy sequences to a separate repository.
+https://github.com/jmagaram/rescript-seq
+
 ## Version 2.0.0
 
 - Fixed

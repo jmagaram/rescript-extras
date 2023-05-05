@@ -14,7 +14,7 @@ let isLocalDevelopment = () => {
 }
 
 let onlyShowFailures = false
-let filter = test => []->Js.Array2.every(word => test->Test.hasKeyword(word))
+let filter = test => [""]->Js.Array2.every(word => test->Test.hasKeyword(word))
 let throwOnFailure = !isLocalDevelopment()
 
 let tests =
@@ -29,7 +29,6 @@ let tests =
     Extras__UnionTests.tests,
     Extras__PatternTests.tests,
     Extras__UnknownTests.tests,
-    Extras__SeqTests.tests,
     Extras__TrampolineTests.tests,
   ]->Array.concatMany
 
