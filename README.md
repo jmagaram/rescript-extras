@@ -30,7 +30,7 @@ Everything is accessible in the root-level `Extras` module.
 
 ```rescript
 let arr = "abc" -> Extras.NonEmptyArray.of1
-let opt = Some(1) -> Extras.Option.isSomeAnd(i=>i >= 1)
+let opt = Some(1) -> Extras.Option.isSomeAnd(i => i >= 1)
 ```
 
 ## Task and TaskResult
