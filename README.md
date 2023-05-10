@@ -23,9 +23,10 @@ Add to your `bsconfig.json`...
 {
   ...
 + "bs-dependencies": ["@jmagaram/rescript-extras"]
-+ "bsc-flags": ["-open @jmagaram/rescript-extras"],
 }
 ```
+
+Then everything is accessible in the root-level `Extras` module.
 
 ## Task and TaskResult
 
