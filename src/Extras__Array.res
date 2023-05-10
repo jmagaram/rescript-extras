@@ -42,3 +42,20 @@ let filterSomeWith = (xs, f) => {
 }
 
 let filterSome = xs => xs->filterSomeWith((value, _) => value)
+
+let unfold = (state, generator) => {
+  let push = Js.Array2.push
+  let result = []
+  let state = ref(state)
+  let break = ref(false)
+  while !break.contents {
+    switch generator(state.contents) {
+    | None => break := true
+    | Some((item, nextState)) => {
+        result->push(item)->ignore
+        state := nextState
+      }
+    }
+  }
+  result
+}

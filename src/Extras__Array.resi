@@ -8,3 +8,4 @@ let last: array<'a> => option<'a>
 let lastIndex: array<'a> => option<int>
 let prepend: (array<'a>, array<'a>) => array<'a>
 let filterSome: array<option<'a>> => array<'a>
+let unfold: ('a, 'a => option<('b, 'a)>) => array<'b>
