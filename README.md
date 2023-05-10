@@ -2,16 +2,16 @@
 
 Utilities for [ReScript](https://rescript-lang.org). Includes:
 
-- [Lazy sequences](https://github.com/jmagaram/rescript-seq) are now in a separate repository.
-- `Task` and `TaskResult`
+- [Sequences](https://github.com/jmagaram/rescript-seq) are now in a separate repository.
+- A lazy-promise `Task` and `TaskResult`
 - Untagged `Union` and `Literal` to construct and pattern match on discriminated unions of any kind
 - Useful extensions to `Option`, `Result`, and `Array`
-- `NonEmptyArray`
+- `NonEmptyArray` for arrays with at least 1 item
+- A simple `Test` runner
 - Comparison utilities
 - `Trampoline` module to remove recursion
-- A simple `Test` runner
 
-## To install
+## To install and use
 
 ```sh
 npm install @jmagaram/rescript-extras
@@ -26,7 +26,11 @@ Add to your `bsconfig.json`...
 }
 ```
 
-Then everything is accessible in the root-level `Extras` module.
+Everything is accessible in the root-level `Extras` module.
+
+```rescript
+let arr = 1 -> Extras.NonEmptyArray.of1
+```
 
 ## Task and TaskResult
 
