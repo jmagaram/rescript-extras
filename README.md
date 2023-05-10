@@ -29,7 +29,8 @@ Add to your `bsconfig.json`...
 Everything is accessible in the root-level `Extras` module.
 
 ```rescript
-let arr = 1 -> Extras.NonEmptyArray.of1
+let arr = "abc" -> Extras.NonEmptyArray.of1
+let opt = Some(1) -> Extras.Option.isSomeAnd(i=>i >= 1)
 ```
 
 ## Task and TaskResult
