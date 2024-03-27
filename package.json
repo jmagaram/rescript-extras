@@ -1,6 +1,6 @@
 {
   "name": "@jmagaram/rescript-extras",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "module": "",
   "description": "Useful general-purpose utility functions and modules for ReScript projects.",
   "keywords": [

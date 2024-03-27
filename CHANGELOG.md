@@ -1,4 +1,4 @@
-## Version 3.0
+## Version 4.0.0
 
 - Switch to uncurried V11 compiler
 - Use Core library
