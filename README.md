@@ -17,7 +17,7 @@ Utilities for [ReScript](https://rescript-lang.org). Includes:
 npm install @jmagaram/rescript-extras
 ```
 
-Add to your `bsconfig.json`...
+Add to your `rescript.json`...
 
 ```diff
 {
@@ -61,7 +61,7 @@ This implementation does not utilize any special compiler support and so there a
 
 ## Literal
 
-Functors to create **`Literal`** types of various kinds using **`MakeString`** and **`MakeInt`** and others. Includes built-in literals for `True`, `False`, `Null`, and `Undefined`. You can create literals from reference types, and provide a custom equality operator to do things like case-insensitive string comparison. This implementation is completely type safe because each literal is its own unique type; you can't just cast any string to a "yes" for example.
+Functors to create **`Literal`** types of various kinds using **`MakeString`** and **`MakeInt`** and others. Includes built-in literals for `True`, `False`, and `Null`. You can create literals from reference types, and provide a custom equality operator to do things like case-insensitive string comparison. This implementation is completely type safe because each literal is its own unique type; you can't just cast any string to a "yes" for example.
 
 ## Option
 
@@ -85,7 +85,7 @@ Similar to the `Types` module, includes functions to safely inspect unknown valu
 
 ## Cmp and CmpUtilities
 
-`Cmp.t` is the `('a,'a) => int` comparison function. The **`Cmp`** module provides comparison utilities such as as **`eq`**, **`neq`**, **`lt`**, **`gte`**, **`min`**, and **`max`**. **`fromMap`** makes it easy to generate a comparison function for an object based on a specific property in it. Or use **`reverse`** to change direction.
+`Cmp.t` is the `('a,'a) => float` comparison function. The **`Cmp`** module provides comparison utilities such as as **`eq`**, **`neq`**, **`lt`**, **`gte`**, **`min`**, and **`max`**. **`fromMap`** makes it easy to generate a comparison function for an object based on a specific property in it. Or use **`reverse`** to change direction.
 
 Functors **`MakeCompare`** and **`MakeEquals`** add sorting and equality functions to your custom data types.
 
