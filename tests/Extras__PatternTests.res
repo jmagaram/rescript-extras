@@ -223,7 +223,7 @@ let tests = {
     isTypeOfTest(
       ~title="MakeNull (int)",
       ~guard=NullInt.isTypeOf,
-      ~ok=[3->Null.make, 6->Null.make, null],
+      ~ok=[3->Null.make, 6->Null.make, Null.null],
       ~invalid1="abc",
       ~invalid2=false,
       ~invalid3={"a": 1},
@@ -232,8 +232,8 @@ let tests = {
       ~title="MakeNull (int)",
       ~equals=NullInt.equals,
       ~expectation="when both null => true",
-      ~a=null,
-      ~b=null,
+      ~a=Null.null,
+      ~b=Null.null,
     ),
     areEqual(
       ~title="MakeNull (int)",
@@ -246,7 +246,7 @@ let tests = {
       ~title="MakeNull (int)",
       ~equals=NullInt.equals,
       ~expectation="when one is null => false",
-      ~a=null,
+      ~a=Null.null,
       ~b=3->Null.make,
     ),
     areNotEqual(

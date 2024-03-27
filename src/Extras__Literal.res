@@ -27,7 +27,7 @@ module Make = (
 
 module Null = Make({
   type domain = Null.t<unknown>
-  let value = null
+  let value = Null.null
 })
 
 module True = Make({
