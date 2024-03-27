@@ -1,5 +1,3 @@
-open Belt
-
 let fromArrayMap = (xs, f) => {
   let oks = []
   let rec go = inx =>

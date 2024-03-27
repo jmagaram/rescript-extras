@@ -7,8 +7,6 @@ module OptionEx = Extras__Option
 module Test = Extras__Test
 module ArrayEx = Extras__Array
 module Pattern = Extras__Pattern
-module Result = Belt.Result
-module Option = Belt.Option
 
 // ================================================
 // Simple union of any string and the literal false
@@ -163,9 +161,7 @@ module FancyUnionTest = {
       test(~expectation="fromNegativeOne", () =>
         NegativeOne.value->Target.fromNegativeOne->Obj.magic == -1
       ),
-      test(~expectation="fromNull", () =>
-        Literal.Null.value->Target.fromNull->Obj.magic == Js.null
-      ),
+      test(~expectation="fromNull", () => Literal.Null.value->Target.fromNull->Obj.magic == null),
       test(~expectation="fromSuccess", () => {
         let value = {"success": Literal.True.value, "count": 5}
         value->Target.fromSuccess->Obj.magic == value
@@ -228,7 +224,7 @@ module PointTests = {
     type t = (float, float)
     let isTypeOf = u =>
       // lightweight validation; just check length
-      Js.Array2.isArray(u) && Js.Array2.length((Obj.magic(u): array<unknown>)) == 2
+      Array.isArray(u) && Array.length((Obj.magic(u): array<unknown>)) == 2
     let equals = (x: t, y: t) => x == y
   }
 
@@ -236,7 +232,7 @@ module PointTests = {
     type t = (float, float, float)
     let isTypeOf = u =>
       // lightweight validation; just check length
-      Js.Array2.isArray(u) && Js.Array2.length((Obj.magic(u): array<unknown>)) == 3
+      Array.isArray(u) && Array.length((Obj.magic(u): array<unknown>)) == 3
     let equals = (x: t, y: t) => x == y
   }
 
@@ -274,7 +270,7 @@ module PointTests = {
 
 // =============================================================================
 // Use type-safe JSON parsing to determine the shape and validity of each choice
-// in the union. ONLY USING RescriptStruct here to see how it compares to using
+// in the union. ONLY USING RescriptSchema here to see how it compares to using
 // the Union module in this library. Attempting to build a union with easy-to-use
 // constructors, equality, and pattern matching.
 //
@@ -283,20 +279,23 @@ module PointTests = {
 // C: | { "x": int, "y": int }
 // =============================================================================
 
-module OnlyRescriptStructTests = {
-  open RescriptStruct
+module OnlyRescriptSchemaTests = {
+  open RescriptSchema
 
   module ShortString = {
     @unboxed type t = Short(string)
     let struct =
-      S.string()->S.String.min(3)->S.String.max(10)->S.transform(~parser=v => Short(v), ())
+      S.string
+      ->S.String.min(3)
+      ->S.String.max(10)
+      ->S.variant(s => Short(s))
     let make = s => s->S.parseAnyWith(struct)->ResultEx.toOption
     let equals = (x: t, y: t) => x === y
   }
 
   module NonNegativeInt = {
     @unboxed type t = NonNegative(int)
-    let struct = S.int()->S.Int.min(0)->S.transform(~parser=v => NonNegative(v), ())
+    let struct = S.int->S.Int.min(0)->S.variant(n => NonNegative(n))
     let make = n => n->S.parseAnyWith(struct)->ResultEx.toOption
     let equals = (x: t, y: t) => x === y
   }
@@ -304,8 +303,8 @@ module OnlyRescriptStructTests = {
   module Point = {
     type t = {x: int, y: int}
     let struct = S.object(o => {
-      x: o->S.field("x", S.int()),
-      y: o->S.field("y", S.int()),
+      x: o.field("x", S.int),
+      y: o.field("y", S.int),
     })
     let make = (x, y) => {x, y}
     let equals = (a: t, b: t) => a.x === b.x && a.y === b.y
@@ -337,12 +336,12 @@ module OnlyRescriptStructTests = {
   module Target: TargetType = {
     type t
 
-    let makeUnsafe = (i): t => Obj.magic(i)
+    let makeUnsafe = (i): S.t<'a> => Obj.magic(i)
 
     let unionStruct: S.t<t> = S.union([
-      Point.struct->S.transform(~parser=makeUnsafe, ()),
-      ShortString.struct->S.transform(~parser=makeUnsafe, ()),
-      NonNegativeInt.struct->S.transform(~parser=makeUnsafe, ()),
+      Point.struct->makeUnsafe,
+      ShortString.struct->makeUnsafe,
+      NonNegativeInt.struct->makeUnsafe,
     ])
 
     external fromNonNegativeInt: NonNegativeInt.t => t = "%identity"
@@ -363,25 +362,24 @@ module OnlyRescriptStructTests = {
         ->OptionEx.orElseWith(() => toShortString(value)->Option.map(onString))
       switch result {
       | Some(v) => v
-      | None => Js.Exn.raiseError("Unsafely cast value; did not pattern match.")
+      | None => Exn.raiseError("Unsafely cast value; did not pattern match.")
       }
     }
 
-    let equalsBy = (f, eq, x, y) =>
-      f(x)->Option.map(x => f(y)->Option.mapWithDefault(false, y => eq(x, y)))
+    let equalsBy = (f, eq, x, y) => f(x)->Option.map(x => f(y)->Option.mapOr(false, y => eq(x, y)))
 
     let equals = (x, y) => {
       equalsBy(toPoint, Point.equals, x, y)
       ->OptionEx.orElseWith(() => equalsBy(toNonNegativeInt, NonNegativeInt.equals, x, y))
       ->OptionEx.orElseWith(() => equalsBy(toShortString, ShortString.equals, x, y))
-      ->Option.getWithDefault(false)
+      ->Option.getOr(false)
     }
   }
 
   let test = (~expectation, predicate) =>
     Test.fromPredicate(
       ~category="Union",
-      ~title="Use RescriptStruct exclusively",
+      ~title="Use RescriptSchema exclusively",
       ~expectation,
       predicate,
     )
@@ -460,18 +458,17 @@ module OnlyRescriptStructTests = {
 // B: | int    // non-negative
 // C: | { "x": int, "y": int }
 // =============================================================================
-// 92 lines : Using RescriptStruct exclusively with explicit module type
-// 70 lines : Using RescriptStruct exclusively without module type
+// 92 lines : Using RescriptSchema exclusively with explicit module type
+// 70 lines : Using RescriptSchema exclusively without module type
 // 44 lines : Using Union module defined in this package
 // =============================================================================
 
-module WithHelpFromRescriptStruct = {
-  open RescriptStruct
+module WithHelpFromRescriptSchema = {
+  open RescriptSchema
 
   module ShortString = {
     @unboxed type t = Short(string)
-    let struct =
-      S.string()->S.String.min(3)->S.String.max(10)->S.transform(~parser=v => Short(v), ())
+    let struct = S.string->S.String.min(3)->S.String.max(10)->S.variant(s => Short(s))
     let make = (s: string) => s->S.parseAnyWith(struct)->ResultEx.toOption
     let isTypeOf = (s: unknown) => s->S.parseAnyWith(struct)->Result.isOk
     let equals = (x: t, y: t) => x === y
@@ -479,7 +476,7 @@ module WithHelpFromRescriptStruct = {
 
   module NonNegativeInt = {
     @unboxed type t = NonNegative(int)
-    let struct = S.int()->S.Int.min(0)->S.transform(~parser=v => NonNegative(v), ())
+    let struct = S.int->S.Int.min(0)->S.variant(n => NonNegative(n))
     let make = (n: int) => n->S.parseAnyWith(struct)->ResultEx.toOption
     let isTypeOf = (s: unknown) => s->S.parseAnyWith(struct)->Result.isOk
     let equals = (x: t, y: t) => x === y
@@ -488,8 +485,8 @@ module WithHelpFromRescriptStruct = {
   module Point = {
     type t = {x: int, y: int}
     let struct = S.object(o => {
-      x: o->S.field("x", S.int()),
-      y: o->S.field("y", S.int()),
+      x: o.field("x", S.int),
+      y: o.field("y", S.int),
     })
     let make = (x, y) => {x, y}
     let isTypeOf = (s: unknown) => s->S.parseAnyWith(struct)->Result.isOk
@@ -508,7 +505,12 @@ module WithHelpFromRescriptStruct = {
     let toString = toA
     let toNonNegativeInt = toB
     let toPoint = toC
-    let match = (~onString, ~onInt, ~onPoint) => matchABC(~onA=onString, ~onB=onInt, ~onC=onPoint)
+    let match = (~onString, ~onInt, ~onPoint) => matchABC(
+      ~onA=onString,
+      ~onB=onInt,
+      ~onC=onPoint,
+      _,
+    )
   }
 }
 
@@ -520,7 +522,7 @@ module LazinessTests = {
   module StringThrows: Extras__Pattern.T = {
     type t = string
     let isTypeOf = (_: unknown) => {
-      Js.Exn.raiseError("Tried to parse a string.")->ignore
+      Exn.raiseError("Tried to parse a string.")->ignore
       true
     }
     let equals = (a: string, b: string) => a == b
@@ -587,6 +589,6 @@ let tests =
     StringOrFalseTests.tests,
     FancyUnionTest.tests,
     PointTests.tests,
-    OnlyRescriptStructTests.tests,
+    OnlyRescriptSchemaTests.tests,
     LazinessTests.tests,
-  ]->Belt.Array.concatMany
+  ]->Array.flat

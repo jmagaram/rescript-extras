@@ -1,5 +1,5 @@
 module NEA = Extras__NonEmptyArray
-module O = Belt.Option
+module O = Option
 
 let expectEq = (~title, ~expectation, ~a, ~b) =>
   Extras__Test.fromPredicate(~category="NonEmptyArray", ~title, ~expectation, () => a() == b)
@@ -64,13 +64,13 @@ let tests = [
   expectEq(
     ~title="maxBy",
     ~expectation="return max",
-    ~a=() => NEA.of3(1, 2, 3)->NEA.maxBy((i, j) => i < j ? -1 : i > j ? 1 : 0),
+    ~a=() => NEA.of3(1, 2, 3)->NEA.maxBy(Int.compare),
     ~b=3,
   ),
   expectEq(
     ~title="minBy",
     ~expectation="return min",
-    ~a=() => NEA.of3(1, 2, 3)->NEA.minBy((i, j) => i < j ? -1 : i > j ? 1 : 0),
+    ~a=() => NEA.of3(1, 2, 3)->NEA.minBy(Int.compare),
     ~b=1,
   ),
   expectEq(

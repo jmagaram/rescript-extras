@@ -1,4 +1,3 @@
-module Option = Belt.Option
 module OptionEx = Extras__Option
 module Pattern = Extras__Pattern
 
@@ -31,11 +30,11 @@ module Make2 = (
     ->OptionEx.orElseWith(() => value->B_Tools.make->Option.map(onB)) {
     | Some(value) => value
     | None =>
-      Js.Exn.raiseError("The value was unsafely cast and did not match any of the provided types.")
+      Exn.raiseError("The value was unsafely cast and did not match any of the provided types.")
     }
 
   let equals = (x: t, y: t) =>
-    A_Tools.eq(x, y)->OptionEx.orElseWith(() => B_Tools.eq(x, y))->Option.getWithDefault(false)
+    A_Tools.eq(x, y)->OptionEx.orElseWith(() => B_Tools.eq(x, y))->Option.getOr(false)
 }
 
 module Make3 = (
@@ -77,14 +76,14 @@ module Make3 = (
     ->OptionEx.orElseWith(() => value->C_Tools.make->Option.map(onC)) {
     | Some(value) => value
     | None =>
-      Js.Exn.raiseError("The value was unsafely cast and did not match any of the provided types.")
+      Exn.raiseError("The value was unsafely cast and did not match any of the provided types.")
     }
 
   let equals = (x: t, y: t) =>
     A_Tools.eq(x, y)
     ->OptionEx.orElseWith(() => B_Tools.eq(x, y))
     ->OptionEx.orElseWith(() => C_Tools.eq(x, y))
-    ->Option.getWithDefault(false)
+    ->Option.getOr(false)
 }
 
 module Make4 = (
@@ -133,7 +132,7 @@ module Make4 = (
     ->OptionEx.orElseWith(() => value->D_Tools.make->Option.map(onD)) {
     | Some(value) => value
     | None =>
-      Js.Exn.raiseError("The value was unsafely cast and did not match any of the provided types.")
+      Exn.raiseError("The value was unsafely cast and did not match any of the provided types.")
     }
 
   let equals = (x: t, y: t) =>
@@ -141,7 +140,7 @@ module Make4 = (
     ->OptionEx.orElseWith(() => B_Tools.eq(x, y))
     ->OptionEx.orElseWith(() => C_Tools.eq(x, y))
     ->OptionEx.orElseWith(() => D_Tools.eq(x, y))
-    ->Option.getWithDefault(false)
+    ->Option.getOr(false)
 }
 
 module Make5 = (
@@ -197,7 +196,7 @@ module Make5 = (
     ->OptionEx.orElseWith(() => value->E_Tools.make->Option.map(onE)) {
     | Some(value) => value
     | None =>
-      Js.Exn.raiseError("The value was unsafely cast and did not match any of the provided types.")
+      Exn.raiseError("The value was unsafely cast and did not match any of the provided types.")
     }
 
   let equals = (x: t, y: t) =>
@@ -206,5 +205,5 @@ module Make5 = (
     ->OptionEx.orElseWith(() => C_Tools.eq(x, y))
     ->OptionEx.orElseWith(() => D_Tools.eq(x, y))
     ->OptionEx.orElseWith(() => E_Tools.eq(x, y))
-    ->Option.getWithDefault(false)
+    ->Option.getOr(false)
 }

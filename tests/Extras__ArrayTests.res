@@ -6,18 +6,13 @@ let test = (~title, ~expect, ~a, ~b) =>
     let m = a()
     let n = b
     if m != n {
-      Js.Console.log("")
-      Js.Console.log(`== NOT EQUAL : ${title} ==`)
-      Js.Console.log2("a: ", m)
-      Js.Console.log2("b: ", n)
+      Console.log("")
+      Console.log(`== NOT EQUAL : ${title} ==`)
+      Console.log2("a: ", m)
+      Console.log2("b: ", n)
     }
     m == n
   })
-
-let concatSort = (xxs: array<array<'a>>, stringify: 'a => string) =>
-  xxs
-  ->Js.Array2.map(xs => xs->Js.Array2.map(stringify)->Js.Array2.joinWith(""))
-  ->Js.Array2.sortInPlace
 
 let unfoldTests = {
   let make = (expectation, seed, generator, expected) =>
@@ -30,7 +25,7 @@ let unfoldTests = {
     ("multiplicative", 101, i => i < 100 ? Some(i, i * 2) : None, []),
     ("simple range up", 5, i => i <= 20 ? Some(i, i + 5) : None, [5, 10, 15, 20]),
     ("simple range down", 20, i => i > 15 ? Some(i, i - 1) : None, [20, 19, 18, 17, 16]),
-  ]->Belt.Array.map(((expectation, seed, f, goal)) => make(expectation, seed, f, goal))
+  ]->Array.map(((expectation, seed, f, goal)) => make(expectation, seed, f, goal))
 }
 
 let tests = {
@@ -105,5 +100,5 @@ let tests = {
       ~a=() => [None, Some(1), Some(2), None]->A.filterSome,
       ~b=[1, 2],
     ),
-  ]->Js.Array2.concat(unfoldTests)
+  ]->Array.concat(unfoldTests)
 }

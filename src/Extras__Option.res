@@ -1,5 +1,3 @@
-open Belt
-
 let isSomeAnd = (o, p) =>
   switch o {
   | None => false
@@ -12,7 +10,7 @@ let isNoneOr = (o, p) =>
   | Some(v) => p(v)
   }
 
-let toArray = o => o->Option.mapWithDefault([], i => [i])
+let toArray = o => o->Option.mapOr([], i => [i])
 
 let concat = (x, y, f) =>
   switch (x, y) {

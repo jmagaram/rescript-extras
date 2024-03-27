@@ -1,22 +1,21 @@
-module R = Belt.Result
+module R = Result
 module RX = Extras__Result
-module Promise = Js.Promise2
 
 @genType
 type t<'a> = unit => promise<'a>
 
 external toExn: 'a => exn = "%identity"
 
-let make = (~promise, ~onError, ()) =>
+let make = (~promise, ~onError) => () =>
   promise()->Promise.catch(e => e->toExn->onError->Promise.resolve)
 
-let map = (t, f, ()) => t()->Promise.then(r => f(r)->Promise.resolve)
+let map = (t, f) => () => t()->Promise.then(r => f(r)->Promise.resolve)
 
 let toPromise = t => t()
 
 let forEach = (t, f) => t->map(f)
 
-let spy = (t, effect, ()) =>
+let spy = (t, effect) => () =>
   t()->Promise.then(r => {
     effect(r)
     r->Promise.resolve

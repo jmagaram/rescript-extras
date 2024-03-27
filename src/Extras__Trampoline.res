@@ -1,5 +1,3 @@
-module Option = Belt.Option
-
 type rec t<'a> =
   | Done('a)
   | Work(unit => t<'a>)

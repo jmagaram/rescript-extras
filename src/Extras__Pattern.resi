@@ -31,13 +31,13 @@ module MakeOption: (P: T) => (T with type t = option<P.t>)
 Given a `Pattern.T`, construct a pattern corresponding to a `null | undefined |
 t` of that type.
 */
-module MakeNullable: (P: T) => (T with type t = Js.Nullable.t<P.t>)
+module MakeNullable: (P: T) => (T with type t = Nullable.t<P.t>)
 
 /**
 Given a `Pattern.T`, construct a pattern corresponding to a `null | t` of that
 type.
 */
-module MakeNull: (P: T) => (T with type t = Js.Null.t<P.t>)
+module MakeNull: (P: T) => (T with type t = Null.t<P.t>)
 
 /**
 Given two patterns, construct a tuple pattern (array of length 2).
@@ -88,4 +88,4 @@ module Int: T with type t = int
 module Float: T with type t = float
 module Bool: T with type t = bool
 module String: T with type t = string
-module Date: T with type t = Js.Date.t
+module Date: T with type t = Date.t

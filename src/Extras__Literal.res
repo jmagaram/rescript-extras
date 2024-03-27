@@ -1,6 +1,5 @@
 module Unknown = Extras__Unknown
 module OptionEx = Extras__Option
-module Option = Belt.Option
 
 module type T = {
   type t
@@ -27,13 +26,8 @@ module Make = (
 }
 
 module Null = Make({
-  type domain = Js.Null.t<unknown>
-  let value = Js.null
-})
-
-module Undefined = Make({
-  type domain = Js.Undefined.t<unknown>
-  let value = Js.undefined
+  type domain = Null.t<unknown>
+  let value = null
 })
 
 module True = Make({
@@ -64,8 +58,8 @@ module MakeString = (
 ): (T with type domain := string) => {
   type t = string
   let normalize = {
-    let trim = s => C.trimmed ? Js.String2.trim(s) : s
-    let toLower = s => C.caseInsensitive ? Js.String2.toLocaleLowerCase(s) : s
+    let trim = s => C.trimmed ? String.trim(s) : s
+    let toLower = s => C.caseInsensitive ? String.toLocaleLowerCase(s) : s
     s => s->trim->toLower
   }
   let value = C.value->normalize

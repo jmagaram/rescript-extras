@@ -22,8 +22,8 @@ module MakeEquals = (
     let cmp: Cmp.t<domain>
   },
 ): (Equality with type t := C.domain) => {
-  let eq = C.cmp->Cmp.eq
-  let neq = C.cmp->Cmp.neq
+  let eq = C.cmp->(Cmp.eq(_, ...))
+  let neq = C.cmp->(Cmp.neq(_, ...))
 }
 
 module MakeCompare = (
@@ -32,10 +32,10 @@ module MakeCompare = (
     let cmp: Cmp.t<domain>
   },
 ): (Ordering with type t := C.domain) => {
-  let lt = C.cmp->Cmp.lt
-  let lte = C.cmp->Cmp.lte
-  let gt = C.cmp->Cmp.gt
-  let gte = C.cmp->Cmp.gte
-  let min = C.cmp->Cmp.min
-  let max = C.cmp->Cmp.max
+  let lt = C.cmp->(Cmp.lt(_, ...))
+  let lte = C.cmp->(Cmp.lte(_, ...))
+  let gt = C.cmp->(Cmp.gt(_, ...))
+  let gte = C.cmp->(Cmp.gte(_, ...))
+  let min = C.cmp->(Cmp.min(_, ...))
+  let max = C.cmp->(Cmp.max(_, ...))
 }

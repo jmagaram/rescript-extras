@@ -1,19 +1,18 @@
 module T = Extras__Test
 module U = Extras__Unknown
-module Option = Belt.Option
 
 let tests = [
   T.fromPredicate(
     ~category="Unknown",
     ~title="isNullOrUndefined",
     ~expectation="when null => true",
-    () => Js.null->U.isNullOrUndefined == true,
+    () => null->U.isNullOrUndefined == true,
   ),
   T.fromPredicate(
     ~category="Unknown",
     ~title="isNullOrUndefined",
     ~expectation="when undefined => true",
-    () => Js.undefined->U.isNullOrUndefined == true,
+    () => undefined->U.isNullOrUndefined == true,
   ),
   T.fromPredicate(
     ~category="Unknown",
@@ -43,6 +42,6 @@ let tests = [
     ~category="Unknown",
     ~title="getBool",
     ~expectation="when object is null => None",
-    () => Js.null->U.getBool("a")->Option.isNone,
+    () => null->U.getBool("a")->Option.isNone,
   ),
 ]

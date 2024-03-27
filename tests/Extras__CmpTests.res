@@ -1,11 +1,11 @@
 module T = Extras__Test
 module C = Extras__Cmp
-module A = Belt.Array
+module A = Array
 
 type person = {name: string, age: int}
 
-let inOrder = (cmp, a, b) => cmp(a, b) == -1 && cmp(b, a) == 1
-let isEqual = (cmp, a, b) => cmp(a, b) == 0 && cmp(b, a) == 0
+let inOrder = (cmp, a, b) => cmp(a, b) == -1.0 && cmp(b, a) == 1.0
+let isEqual = (cmp, a, b) => cmp(a, b) == 0.0 && cmp(b, a) == 0.0
 
 let lessThanTests = (~small, ~big, ~cmp) => {
   let make = (~title, ~isTrue) =>
@@ -39,21 +39,21 @@ let areSameTests = (~a, ~b, ~cmp) => {
 
 let otherTests = [
   T.fromPredicate(~category="Cmp", ~title="fromMap", () => {
-    let target = C.fromMap(i => i.age, C.int)
+    let target = C.fromMap(i => i.age, Int.compare, ...)
     let bob = {name: "bob", age: 3}
     let sue = {name: "sue", age: 8}
     inOrder(target, bob, sue)
   }),
-  T.fromPredicate(~category="Cmp", ~title="fromFloatResult", () => {
-    let f = (x: int, y: int) => x < y ? -1.0 : x > y ? 1.0 : 0.0
-    let target = C.fromFloatResult(f)
+  T.fromPredicate(~category="Cmp", ~title="fromIntResult", () => {
+    let f = (x: int, y: int) => x < y ? -1 : x > y ? 1 : 0
+    let target = C.fromIntResult(f, ...)
     inOrder(target, 3, 9) && isEqual(target, 3, 3)
   }),
   T.fromPredicate(~category="Cmp", ~title="int instance", () => {
-    inOrder(C.int, 1, 2) && isEqual(C.int, 1, 1)
+    inOrder(Int.compare, 1, 2) && isEqual(Int.compare, 1, 1)
   }),
   T.fromPredicate(~category="Cmp", ~title="float instance", () => {
-    inOrder(C.float, 1.0, 2.0) && isEqual(C.float, 1.0, 1.0)
+    inOrder(Float.compare, 1.0, 2.0) && isEqual(Float.compare, 1.0, 1.0)
   }),
   T.fromPredicate(~category="Cmp", ~title="bool instance", () => {
     inOrder(C.bool, false, true) && isEqual(C.bool, false, false)
@@ -62,11 +62,11 @@ let otherTests = [
 
 let tests =
   [
-    lessThanTests(~small=1, ~big=99, ~cmp=C.int),
-    lessThanTests(~small=1, ~big=99, ~cmp=C.int),
-    lessThanTests(~small="a", ~big="b", ~cmp=C.string),
-    areSameTests(~a=1.0, ~b=1.0, ~cmp=C.float),
-    areSameTests(~a=1, ~b=1, ~cmp=C.int),
-    areSameTests(~a="abc", ~b="abc", ~cmp=C.string),
+    lessThanTests(~small=1, ~big=99, ~cmp=Int.compare),
+    lessThanTests(~small=1, ~big=99, ~cmp=Int.compare),
+    lessThanTests(~small="a", ~big="b", ~cmp=String.localeCompare),
+    areSameTests(~a=1.0, ~b=1.0, ~cmp=Float.compare),
+    areSameTests(~a=1, ~b=1, ~cmp=Int.compare),
+    areSameTests(~a="abc", ~b="abc", ~cmp=String.localeCompare),
     otherTests,
-  ]->A.concatMany
+  ]->A.flat

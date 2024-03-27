@@ -1,6 +1,5 @@
 module T = Extras__Test
 module TR = Extras__Trampoline
-module Array = Belt.Array
 
 let factorial = n => {
   let rec go = (total, n) =>
@@ -17,7 +16,7 @@ let factorialTests =
     T.fromPredicate(
       ~category="Functions",
       ~title="Trampoline (factorial)",
-      ~expectation=`${n->Belt.Int.toString}! == ${total->Belt.Int.toString}`,
+      ~expectation=`${n->Int.toString}! == ${total->Int.toString}`,
       () => factorial(n) == total,
     )
   )
@@ -37,7 +36,7 @@ let decrementTests =
     T.fromPredicate(
       ~category="Functions",
       ~title="Trampoline (decrement)",
-      ~expectation=`Can decrement from ${n->Belt.Int.toString}`,
+      ~expectation=`Can decrement from ${n->Int.toString}`,
       () => decrement(n) == 0,
     )
   )

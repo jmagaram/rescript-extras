@@ -40,7 +40,6 @@ module MakeString: (
   },
 ) => (T with type domain := string)
 
-module Null: T with type domain := Js.Null.t<unknown>
-module Undefined: T with type domain := Js.Undefined.t<unknown>
+module Null: T with type domain := Null.t<unknown>
 module True: T with type domain := bool
 module False: T with type domain := bool

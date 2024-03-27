@@ -1,3 +1,8 @@
+## Version 3.0
+
+- Switch to uncurried V11 compiler
+- Use Core library
+
 ## Version 2.1.0
 
 Move lazy sequences to a separate repository.

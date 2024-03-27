@@ -1,5 +1,3 @@
-module Array = Belt.Array
-
 @val external of1: 'a => array<'a> = "Array.of"
 
 let fromOption = opt =>
@@ -13,7 +11,7 @@ let isNotEmpty = xs => xs->Array.length > 0
 
 let exactlyOne = xs =>
   switch xs->Array.length {
-  | 1 => xs->Js.Array2.unsafe_get(0)->Some
+  | 1 => xs->Array.getUnsafe(0)->Some
   | _ => None
   }
 
@@ -27,15 +25,15 @@ let last = xs =>
 
 let lastIndex = xs => xs->Array.length->(i => i == 0 ? None : Some(i - 1))
 
-let prepend = (a, b) => Js.Array2.concat(b, a)
+let prepend = (a, b) => Array.concat(b, a)
 
 let filterSomeWith = (xs, f) => {
   let result = []
-  for i in 0 to Js.Array2.length(xs) - 1 {
-    let item = xs->Js.Array2.unsafe_get(i)
+  for i in 0 to Array.length(xs) - 1 {
+    let item = xs->Array.getUnsafe(i)
     switch f(item, i) {
     | None => ()
-    | Some(i) => result->Js.Array2.push(i)->ignore
+    | Some(i) => result->Array.push(i)->ignore
     }
   }
   result
@@ -44,7 +42,7 @@ let filterSomeWith = (xs, f) => {
 let filterSome = xs => xs->filterSomeWith((value, _) => value)
 
 let unfold = (state, generator) => {
-  let push = Js.Array2.push
+  let push = Array.push
   let result = []
   let state = ref(state)
   let break = ref(false)

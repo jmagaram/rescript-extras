@@ -1,7 +1,6 @@
 module T = Extras__Test
 module L = Extras__Literal
 module Unknown = Extras__Unknown
-module Option = Belt.Option
 module OptionEx = Extras__Option
 
 module Seven = L.MakeInt({

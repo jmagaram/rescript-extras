@@ -1,8 +1,6 @@
-open Belt
 module Test = Extras__Test
 module Task = Extras__Task
 module Ex = Extras
-module Promise = Js.Promise2
 
 let isLocalDevelopment = () => {
   try {
@@ -14,7 +12,7 @@ let isLocalDevelopment = () => {
 }
 
 let onlyShowFailures = false
-let filter = test => [""]->Js.Array2.every(word => test->Test.hasKeyword(word))
+let filter = test => [""]->Array.every(word => test->Test.hasKeyword(word))
 let throwOnFailure = !isLocalDevelopment()
 
 let tests =
@@ -30,7 +28,7 @@ let tests =
     Extras__PatternTests.tests,
     Extras__UnknownTests.tests,
     Extras__TrampolineTests.tests,
-  ]->Array.concatMany
+  ]->Array.flat
 
 Task.Result.make(
   ~promise=() => Ex.Test.runSuite(tests, ~filter, ~onlyShowFailures),
@@ -38,8 +36,8 @@ Task.Result.make(
 )
 ->Task.forEach(s =>
   switch (s, throwOnFailure) {
-  | (Ok(s), true) if s.fail > 0 => Js.Exn.raiseError(`Tests failed: ${s.fail->Int.toString}`)
-  | (Error(_), true) => Js.Exn.raiseError("Could not complete the test suite.")
+  | (Ok(s), true) if s.fail > 0 => Exn.raiseError(`Tests failed: ${s.fail->Int.toString}`)
+  | (Error(_), true) => Exn.raiseError("Could not complete the test suite.")
   | _ => ()
   }
 )

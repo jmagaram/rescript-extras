@@ -9,7 +9,7 @@ module Literal = Extras__Literal
 
 let isTypeOfTest = (~title, ~guard, ~ok, ~invalid1, ~invalid2, ~invalid3) =>
   Test.fromPredicate(~category="Patterns", ~title, ~expectation="isTypeOf", () =>
-    true == ok->Js.Array2.every(i => i->Unknown.make->guard) &&
+    true == ok->Array.every(i => i->Unknown.make->guard) &&
     false == invalid1->Unknown.make->guard &&
     false == invalid2->Unknown.make->guard &&
     false == invalid3->Unknown.make->guard
@@ -51,7 +51,7 @@ let tests = {
     isTypeOfTest(
       ~title="Null (null literal)",
       ~guard=Literal.Null.isTypeOf,
-      ~ok=[Js.null->Obj.magic],
+      ~ok=[null->Obj.magic],
       ~invalid1=false,
       ~invalid2=33,
       ~invalid3="abc",
@@ -107,10 +107,10 @@ let tests = {
     isTypeOfTest(
       ~title="Date",
       ~guard=Pattern.Date.isTypeOf,
-      ~ok=[Js.Date.now()->Js.Date.fromFloat],
+      ~ok=[Date.now()->Date.fromTime],
       ~invalid1="abc",
       ~invalid2=3,
-      ~invalid3=Js.Date.fromString("abc"),
+      ~invalid3=Date.fromString("abc"),
     ),
     isTypeOfTest(
       ~title="MakeOption (string)",
@@ -152,9 +152,9 @@ let tests = {
       ~title="MakeNullable (string)",
       ~guard=NullableString.isTypeOf,
       ~ok=[
-        Js.Nullable.return("abc"),
-        Js.Nullable.return(Js.null->Obj.magic),
-        Js.Nullable.return(Js.undefined->Obj.magic),
+        Nullable.make("abc"),
+        Nullable.make(null->Obj.magic),
+        Nullable.make(undefined->Obj.magic),
       ],
       ~invalid1=1,
       ~invalid2=false,
@@ -163,67 +163,67 @@ let tests = {
     areEqual(
       ~title="MakeNullable (string)",
       ~expectation="when both undefined => true",
-      ~a=Js.Nullable.undefined,
-      ~b=Js.Nullable.undefined,
+      ~a=Nullable.undefined,
+      ~b=Nullable.undefined,
       ~equals=NullableString.equals,
     ),
     areEqual(
       ~title="MakeNullable (string)",
       ~expectation="when both null => true",
-      ~a=Js.Nullable.null,
-      ~b=Js.Nullable.null,
+      ~a=null,
+      ~b=null,
       ~equals=NullableString.equals,
     ),
     areNotEqual(
       ~title="MakeNullable (string)",
       ~expectation="when one undefined and other null => false",
-      ~a=Js.Nullable.null,
-      ~b=Js.Nullable.undefined,
+      ~a=null,
+      ~b=Nullable.undefined,
       ~equals=NullableString.equals,
     ),
     areEqual(
       ~title="MakeNullable (string)",
       ~expectation="when same string => true",
-      ~a="abc"->Js.Nullable.return,
-      ~b="abc"->Js.Nullable.return,
+      ~a="abc"->Nullable.make,
+      ~b="abc"->Nullable.make,
       ~equals=NullableString.equals,
     ),
     areNotEqual(
       ~title="MakeNullable (string)",
       ~expectation="when different string => false",
-      ~a="abc"->Js.Nullable.return,
-      ~b="xyz"->Js.Nullable.return,
+      ~a="abc"->Nullable.make,
+      ~b="xyz"->Nullable.make,
       ~equals=NullableString.equals,
     ),
     areNotEqual(
       ~title="MakeNullable (string)",
       ~expectation="when one undefined and other is string => false",
-      ~a="abc"->Js.Nullable.return,
-      ~b=Js.Nullable.undefined,
+      ~a="abc"->Nullable.make,
+      ~b=Nullable.undefined,
       ~equals=NullableString.equals,
     ),
     areNotEqual(
       ~title="MakeNullable (string)",
       ~expectation="when one null and other is string => false",
-      ~a="abc"->Js.Nullable.return,
-      ~b=Js.Nullable.null,
+      ~a="abc"->Nullable.make,
+      ~b=null,
       ~equals=NullableString.equals,
     ),
     Test.fromPredicate(
       ~category="Patterns",
       ~title="MakeNullable (string)",
-      ~expectation="null != undefined != abc for built-in Js.Nullable using == or ===",
+      ~expectation="null != undefined != abc for built-in Nullable using == or ===",
       () => {
-        let a: Js.Nullable.t<string> = Js.null->Obj.magic
-        let b: Js.Nullable.t<string> = Js.undefined->Obj.magic
-        let c = Js.Nullable.return("abc")
+        let a: Nullable.t<string> = null->Obj.magic
+        let b: Nullable.t<string> = undefined->Obj.magic
+        let c = Nullable.make("abc")
         a !== b && a !== c && b !== c && a != b && a != c && b != c
       },
     ),
     isTypeOfTest(
       ~title="MakeNull (int)",
       ~guard=NullInt.isTypeOf,
-      ~ok=[3->Js.Null.return, 6->Js.Null.return, Js.null],
+      ~ok=[3->Null.make, 6->Null.make, null],
       ~invalid1="abc",
       ~invalid2=false,
       ~invalid3={"a": 1},
@@ -232,29 +232,29 @@ let tests = {
       ~title="MakeNull (int)",
       ~equals=NullInt.equals,
       ~expectation="when both null => true",
-      ~a=Js.null,
-      ~b=Js.null,
+      ~a=null,
+      ~b=null,
     ),
     areEqual(
       ~title="MakeNull (int)",
       ~equals=NullInt.equals,
       ~expectation="when both same non-null value => true",
-      ~a=3->Js.Null.return,
-      ~b=3->Js.Null.return,
+      ~a=3->Null.make,
+      ~b=3->Null.make,
     ),
     areNotEqual(
       ~title="MakeNull (int)",
       ~equals=NullInt.equals,
       ~expectation="when one is null => false",
-      ~a=Js.null,
-      ~b=3->Js.Null.return,
+      ~a=null,
+      ~b=3->Null.make,
     ),
     areNotEqual(
       ~title="MakeNull (int)",
       ~equals=NullInt.equals,
       ~expectation="when both different non-null value => false",
-      ~a=5->Js.Null.return,
-      ~b=3->Js.Null.return,
+      ~a=5->Null.make,
+      ~b=3->Null.make,
     ),
     isTypeOfTest(
       ~title="Tuple",

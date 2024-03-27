@@ -18,7 +18,7 @@ module MakeOption = (P: T) => {
 }
 
 module MakeNullable = (P: T) => {
-  type t = Js.Nullable.t<P.t>
+  type t = Nullable.t<P.t>
   let isTypeOf = (v: unknown) =>
     switch v->Unknown.isNullOrUndefined {
     | true => true
@@ -37,7 +37,7 @@ module MakeNullable = (P: T) => {
 }
 
 module MakeNull = (P: T) => {
-  type t = Js.Null.t<P.t>
+  type t = Null.t<P.t>
   let isTypeOf = (v: unknown) =>
     switch v->Unknown.isNull {
     | true => true
@@ -58,10 +58,10 @@ module MakeTuple2 = (
 ) => {
   type t = (P.A.t, P.B.t)
   let isTypeOf = (u: unknown) =>
-    u->Js.Array2.isArray &&
-    u->Obj.magic->Js.Array2.length == 2 &&
-    P.A.isTypeOf(u->Obj.magic->Js.Array2.unsafe_get(0)) &&
-    P.B.isTypeOf(u->Obj.magic->Js.Array2.unsafe_get(1))
+    u->Array.isArray &&
+    u->Obj.magic->Array.length == 2 &&
+    P.A.isTypeOf(u->Obj.magic->Array.getUnsafe(0)) &&
+    P.B.isTypeOf(u->Obj.magic->Array.getUnsafe(1))
   let equals = ((a1, b1): t, (a2, b2): t) => P.A.equals(a1, a2) && P.B.equals(b1, b2)
 }
 
@@ -74,11 +74,11 @@ module MakeTuple3 = (
 ) => {
   type t = (P.A.t, P.B.t, P.C.t)
   let isTypeOf = (u: unknown) =>
-    u->Js.Array2.isArray &&
-    u->Obj.magic->Js.Array2.length == 3 &&
-    P.A.isTypeOf(u->Obj.magic->Js.Array2.unsafe_get(0)) &&
-    P.B.isTypeOf(u->Obj.magic->Js.Array2.unsafe_get(1)) &&
-    P.C.isTypeOf(u->Obj.magic->Js.Array2.unsafe_get(2))
+    u->Array.isArray &&
+    u->Obj.magic->Array.length == 3 &&
+    P.A.isTypeOf(u->Obj.magic->Array.getUnsafe(0)) &&
+    P.B.isTypeOf(u->Obj.magic->Array.getUnsafe(1)) &&
+    P.C.isTypeOf(u->Obj.magic->Array.getUnsafe(2))
   let equals = ((a1, b1, c1): t, (a2, b2, c2): t) =>
     P.A.equals(a1, a2) && P.B.equals(b1, b2) && P.C.equals(c1, c2)
 }
@@ -109,12 +109,12 @@ module Bool = {
 module String = {
   type t = string
   let isTypeOf = u => u->Unknown.typeof == #string
-  let equals = (x: string, y: string) => Js.String2.localeCompare(x, y) == 0.0
+  let equals = (x: string, y: string) => String.localeCompare(x, y) == 0.0
 }
 
 // https://stackoverflow.com/questions/643782/how-to-check-whether-an-object-is-a-date
 module Date = {
-  type t = Js.Date.t
+  type t = Date.t
   let isTypeOf: 'a => bool = %raw(`function (a) { return (!isNaN(a) && (a instanceof Date) && (typeof a.getMonth === 'function')) }`)
-  let equals = (x: Js.Date.t, y: Js.Date.t) => x == y
+  let equals = (x: Date.t, y: Date.t) => x == y
 }

@@ -124,8 +124,8 @@ let tests = [
     ~title="fromTryCatch",
     ~expectation="when throw, return as None",
     () => {
-      let r = O.fromTryCatch(() => Js.Exn.raiseError("banana"))
-      r->Belt.Option.isNone
+      let r = O.fromTryCatch(() => Exn.raiseError("banana"))
+      r->Option.isNone
     },
   ),
   T.fromPredicate(
