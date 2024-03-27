@@ -17,8 +17,8 @@ external typeof: 'a => typeof = "#typeof"
 
 type object
 type function
-type bigInt = Js.Types.bigint_val
-type symbol = Js.Types.symbol
+type bigInt = BigInt.t
+type symbol = Symbol.t
 
 // typeof null == "object". Gotta love that! Do better here.
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof#typeof_null

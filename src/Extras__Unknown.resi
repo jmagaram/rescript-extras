@@ -41,8 +41,8 @@ external typeof: 'a => typeof = "#typeof"
 
 type object
 type function
-type bigInt = Js.Types.bigint_val
-type symbol = Js.Types.symbol
+type bigInt = BigInt.t
+type symbol = Symbol.t
 
 /**
 Represents a classified JavaScript value. **Note:** Unlike ReScript, JavaScript does not distinguish between floats and ints. A classified `float` can be later converted to an `int` if desired.
@@ -53,9 +53,9 @@ type jsType =
   | Object(object)
   | Bool(bool)
   | Number(float)
-  | BigInt(Js.Types.bigint_val)
+  | BigInt(bigInt)
   | String(string)
-  | Symbol(Js.Types.symbol)
+  | Symbol(symbol)
   | Function(function)
 
 /**
@@ -79,9 +79,9 @@ let isNullOrUndefined: 'a => bool
 let toObject: 'a => option<object>
 let toBool: 'a => option<bool>
 let toFloat: 'a => option<float>
-let toBigInt: 'a => option<Js.Types.bigint_val>
+let toBigInt: 'a => option<bigInt>
 let toString: 'a => option<string>
-let toSymbol: 'a => option<Js.Types.symbol>
+let toSymbol: 'a => option<symbol>
 let toFunction: 'a => option<function>
 
 // Unsafely converts any type to the designated type.
