@@ -1,6 +1,6 @@
 {
   "name": "@jmagaram/rescript-extras",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "module": "",
   "description": "Useful general-purpose utility functions and modules for ReScript projects.",
   "keywords": [
@@ -23,7 +23,7 @@
     "rescript-schema": "^6.4.0"
   },
   "files": [
-    "bsconfig.json",
+    "rescript.json",
     "src/**/*.res",
     "src/**/*.resi",
     "src/**/*.gen.tsx"

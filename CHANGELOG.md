@@ -1,3 +1,7 @@
+## Version 4.1.0
+
+- Fix package files bug
+
 ## Version 4.0.0
 
 - Switch to uncurried V11 compiler
