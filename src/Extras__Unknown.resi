@@ -41,7 +41,7 @@ external typeof: 'a => typeof = "#typeof"
 
 type object
 type function
-type bigInt = BigInt.t
+type bigInt = bigint
 type symbol = Symbol.t
 
 /**
